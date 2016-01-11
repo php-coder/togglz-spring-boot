@@ -1,0 +1,60 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "http://repo.spring.io/snapshot" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.1.RELEASE")
+    }
+}
+
+apply plugin: "java"
+apply plugin: "idea"
+apply plugin: "spring-boot"
+
+ext {
+    javaVersion = "1.8"
+    togglzVersion = "2.2.0.Final"
+}
+
+repositories {
+    mavenCentral()
+    maven { url "http://repo.spring.io/milestone" }
+    maven { url "http://repo.spring.io/snapshot" }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-devtools")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-aop")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.togglz:togglz-servlet:${togglzVersion}")
+    compile("org.togglz:togglz-spring-web:${togglzVersion}")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
+compileJava {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("${project.buildDir}/classes/main")
+        testOutputDir = file("${project.buildDir}/classes/test")
+        downloadJavadoc = true
+        downloadSources = true
+    }
+    project {
+        jdkName = "${javaVersion}"
+        languageLevel = "${javaVersion}"
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "2.10"
+}
