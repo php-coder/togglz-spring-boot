@@ -31,9 +31,11 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.togglz:togglz-console:${togglzVersion}")
     compile("org.togglz:togglz-servlet:${togglzVersion}")
     compile("org.togglz:togglz-spring-web:${togglzVersion}")
     testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.togglz:togglz-junit:${togglzVersion}")
 }
 
 compileJava {

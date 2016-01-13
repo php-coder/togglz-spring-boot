@@ -1,0 +1,32 @@
+spring:
+  profiles.active: dev
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
+    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+logging:
+  level:
+    com.mycompany: DEBUG
+    org.togglz: DEBUG
+togglz:
+  enabled: true
+  console:
+    enabled: true
+    path: /togglz
+  feature-enums: com.mycompany.MyFeatures
+  features:
+    HELLO_WORLD: true
+
+---
+
+spring:
+  profiles: dev
+
+---
+
+spring:
+  profiles: test
+
+---
+
+spring:
+  profiles: prod
