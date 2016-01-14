@@ -33,7 +33,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.togglz:togglz-core:${togglzVersion}")
     compile("org.togglz:togglz-console:${togglzVersion}")
-    // compile("org.togglz:togglz-spring-web:${togglzVersion}")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.togglz:togglz-junit:${togglzVersion}")
 }
