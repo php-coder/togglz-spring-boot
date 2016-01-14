@@ -9,7 +9,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.togglz.console.TogglzConsoleServlet;
-import org.togglz.core.Feature;
+import org.togglz.core.activation.ActivationStrategyProvider;
+import org.togglz.core.activation.DefaultActivationStrategyProvider;
 import org.togglz.core.bootstrap.TogglzBootstrap;
 import org.togglz.core.manager.EnumBasedFeatureProvider;
 import org.togglz.core.manager.FeatureManager;
@@ -19,6 +20,7 @@ import org.togglz.core.repository.StateRepository;
 import org.togglz.core.repository.composite.CompositeStateRepository;
 import org.togglz.core.repository.property.PropertyBasedStateRepository;
 import org.togglz.core.repository.property.PropertySource;
+import org.togglz.core.spi.ActivationStrategy;
 import org.togglz.core.spi.FeatureProvider;
 import org.togglz.core.user.FeatureUser;
 import org.togglz.core.user.NoOpUserProvider;
@@ -88,6 +90,9 @@ public class TogglzAutoConfiguration {
         private FeatureProvider featureProvider;
 
         @Autowired
+        private ActivationStrategyProvider activationStrategyProvider;
+
+        @Autowired
         private List<StateRepository> stateRepositories;
 
         @Autowired
@@ -103,11 +108,18 @@ public class TogglzAutoConfiguration {
                 StateRepository[] repositories = stateRepositories.subList(1, stateRepositories.size() - 1).toArray(new StateRepository[stateRepositories.size() - 1]);
                 stateRepository = new CompositeStateRepository(repository, repositories);
             }
-            return new FeatureManagerBuilder()
+            FeatureManagerBuilder featureManagerBuilder = new FeatureManagerBuilder();
+            String name = properties.getFeatureManagerName();
+            if (name != null && name.length() > 0) {
+                featureManagerBuilder.name(name);
+            }
+            featureManagerBuilder
                     .featureProvider(featureProvider)
+                    .activationStrategyProvider(activationStrategyProvider)
                     .stateRepository(stateRepository)
                     .userProvider(userProvider)
                     .build();
+            return featureManagerBuilder.build();
         }
     }
 
@@ -122,6 +134,25 @@ public class TogglzAutoConfiguration {
         @Bean
         public FeatureProvider featureProvider() {
             return new EnumBasedFeatureProvider(properties.getFeatureEnums());
+        }
+    }
+
+    @Configuration
+    @ConditionalOnMissingBean(ActivationStrategyProvider.class)
+    protected static class ActivationStrategyProviderConfiguration {
+
+        @Autowired(required = false)
+        private List<ActivationStrategy> activationStrategies;
+
+        @Bean
+        public ActivationStrategyProvider activationStrategyProvider() {
+            DefaultActivationStrategyProvider provider = new DefaultActivationStrategyProvider();
+            if (activationStrategies != null && activationStrategies.size() > 0) {
+                for (ActivationStrategy activationStrategy : activationStrategies) {
+                    provider.addActivationStrategy(activationStrategy);
+                }
+            }
+            return provider;
         }
     }
 
@@ -142,6 +173,9 @@ public class TogglzAutoConfiguration {
     @Configuration
     @ConditionalOnMissingBean(UserProvider.class)
     protected static class UserProviderConfiguration {
+
+        @Autowired
+        private TogglzProperties properties;
 
         @Bean
         public UserProvider userProvider() {

@@ -14,6 +14,8 @@ public class TogglzProperties {
 
     private Class<? extends Feature>[] featureEnums;
 
+    private String featureManagerName;
+
     private Properties features = new Properties();
 
     public boolean isEnabled() {
@@ -38,6 +40,14 @@ public class TogglzProperties {
 
     public void setFeatureEnums(Class<? extends Feature>[] featureEnums) {
         this.featureEnums = featureEnums;
+    }
+
+    public String getFeatureManagerName() {
+        return featureManagerName;
+    }
+
+    public void setFeatureManagerName(String featureManagerName) {
+        this.featureManagerName = featureManagerName;
     }
 
     public Properties getFeatures() {

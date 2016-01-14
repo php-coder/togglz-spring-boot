@@ -13,6 +13,7 @@ togglz:
     enabled: true
     path: /togglz
   feature-enums: com.mycompany.MyFeatures
+  feature-manager-name: My Feature Manager
   features:
     HELLO_WORLD: true
 

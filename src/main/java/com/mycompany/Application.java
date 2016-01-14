@@ -16,24 +16,4 @@ public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-
-//    @Bean
-//    public TogglzConfig togglzConfig() {
-//        return new TogglzConfig() {
-//            @Override
-//            public Class<? extends Feature> getFeatureClass() {
-//                return MyFeatures.class;
-//            }
-//
-//            @Override
-//            public StateRepository getStateRepository() {
-//                return new InMemoryStateRepository();
-//            }
-//
-//            @Override
-//            public UserProvider getUserProvider() {
-//                return new NoOpUserProvider();
-//            }
-//        };
-//    }
 }
