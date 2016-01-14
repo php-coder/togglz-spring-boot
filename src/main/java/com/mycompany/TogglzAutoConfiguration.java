@@ -133,7 +133,11 @@ public class TogglzAutoConfiguration {
         public ActivationStrategyProvider activationStrategyProvider() {
             DefaultActivationStrategyProvider provider = new DefaultActivationStrategyProvider();
             if (activationStrategies != null && activationStrategies.size() > 0) {
-                provider.addActivationStrategies(activationStrategies);
+                // https://github.com/togglz/togglz/pull/149
+                // provider.addActivationStrategies(activationStrategies);
+                for (ActivationStrategy activationStrategy : activationStrategies) {
+                    provider.addActivationStrategy(activationStrategy);
+                }
             }
             return provider;
         }
