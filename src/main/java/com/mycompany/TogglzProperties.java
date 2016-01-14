@@ -3,6 +3,7 @@ package com.mycompany;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.togglz.core.Feature;
 
+import java.util.Map;
 import java.util.Properties;
 
 @ConfigurationProperties("togglz")
@@ -16,7 +17,7 @@ public class TogglzProperties {
 
     private String featureManagerName;
 
-    private Properties features = new Properties();
+    private Map<String,String> features;
 
     public boolean isEnabled() {
         return enabled;
@@ -50,11 +51,11 @@ public class TogglzProperties {
         this.featureManagerName = featureManagerName;
     }
 
-    public Properties getFeatures() {
+    public Map<String, String> getFeatures() {
         return features;
     }
 
-    public void setFeatures(Properties features) {
+    public void setFeatures(Map<String, String> features) {
         this.features = features;
     }
 

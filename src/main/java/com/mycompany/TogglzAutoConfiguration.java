@@ -17,6 +17,7 @@ import org.togglz.core.manager.FeatureManager;
 import org.togglz.core.manager.FeatureManagerBuilder;
 import org.togglz.core.repository.StateRepository;
 import org.togglz.core.repository.composite.CompositeStateRepository;
+import org.togglz.core.repository.mem.InMemoryStateRepository;
 import org.togglz.core.repository.property.PropertyBasedStateRepository;
 import org.togglz.core.repository.property.PropertySource;
 import org.togglz.core.spi.ActivationStrategy;
@@ -29,6 +30,8 @@ import org.togglz.core.user.UserProvider;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 @Configuration
 @ConditionalOnProperty(name = "togglz.enabled")
@@ -152,8 +155,17 @@ public class TogglzAutoConfiguration {
 
         @Bean
         public StateRepository stateRepository() {
-            PropertySource propertySource = new PropertiesPropertySource(properties.getFeatures());
-            return new PropertyBasedStateRepository(propertySource);
+
+            System.out.println("\n\n\nFEATURES = " + properties.getFeatures());
+
+            Map<String, String> features = properties.getFeatures();
+            if (features != null && features.size() > 0) {
+                Properties props = new Properties();
+                props.putAll(properties.getFeatures());
+                PropertySource propertySource = new PropertiesPropertySource(props);
+                return new PropertyBasedStateRepository(propertySource);
+            }
+            return new InMemoryStateRepository();
         }
     }
 
