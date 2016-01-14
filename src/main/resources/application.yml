@@ -16,6 +16,7 @@ togglz:
   feature-manager-name: My Feature Manager
   features:
     HELLO_WORLD: true
+    REVERSE_GREETING: false
 
 ---
 

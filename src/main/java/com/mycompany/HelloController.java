@@ -11,6 +11,8 @@ import org.togglz.core.manager.FeatureManager;
 @RestController
 public class HelloController {
 
+    private static final String GREETING = "Greetings from Spring Boot!";
+
     private static Log log = LogFactory.getLog(HelloController.class);
 
     private FeatureManager featureManager;
@@ -23,10 +25,18 @@ public class HelloController {
     @RequestMapping("/")
     public ResponseEntity index() {
 
-        log.debug("HELLO WORLD feature active: " + featureManager.isActive(MyFeatures.HELLO_WORLD));
+        boolean active = featureManager.isActive(MyFeatures.HELLO_WORLD);
+        boolean reverse = featureManager.isActive(MyFeatures.REVERSE_GREETING);
 
-        if (featureManager.isActive(MyFeatures.HELLO_WORLD)) {
-            return ResponseEntity.ok().body("Greetings from Spring Boot!");
+        log.debug(MyFeatures.HELLO_WORLD + " feature active: " + active);
+        log.debug(MyFeatures.REVERSE_GREETING + " feature active: " + reverse);
+
+        if (active) {
+            StringBuilder sb = new StringBuilder("Greetings from Spring Boot!");
+            if (reverse) {
+                sb.reverse();
+            }
+            return ResponseEntity.ok().body(sb.toString());
         }
         return ResponseEntity.notFound().build();
     }
