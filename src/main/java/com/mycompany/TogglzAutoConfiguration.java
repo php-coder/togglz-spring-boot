@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -11,11 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.togglz.console.TogglzConsoleServlet;
 import org.togglz.core.activation.ActivationStrategyProvider;
 import org.togglz.core.activation.DefaultActivationStrategyProvider;
-import org.togglz.core.bootstrap.TogglzBootstrap;
 import org.togglz.core.manager.EnumBasedFeatureProvider;
 import org.togglz.core.manager.FeatureManager;
 import org.togglz.core.manager.FeatureManagerBuilder;
-import org.togglz.core.manager.TogglzConfig;
 import org.togglz.core.repository.StateRepository;
 import org.togglz.core.repository.composite.CompositeStateRepository;
 import org.togglz.core.repository.property.PropertyBasedStateRepository;
@@ -26,8 +25,9 @@ import org.togglz.core.user.FeatureUser;
 import org.togglz.core.user.NoOpUserProvider;
 import org.togglz.core.user.SimpleFeatureUser;
 import org.togglz.core.user.UserProvider;
-import org.togglz.servlet.TogglzFilter;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import java.util.List;
 
 @Configuration
@@ -36,18 +36,14 @@ import java.util.List;
 public class TogglzAutoConfiguration {
 
     @Configuration
-    @ConditionalOnMissingBean({TogglzBootstrap.class, TogglzConfig.class})
-    protected static class TogglzBootstrapConfiguration {
-
-        @Autowired
-        private FeatureManager featureManager;
+    protected static class TogglzContextParamConfiguration {
 
         @Bean
-        public TogglzBootstrap togglzBootstrap() {
-            return new TogglzBootstrap() {
+        public ServletContextInitializer  togglzServletContextInitializer() {
+            return new ServletContextInitializer() {
                 @Override
-                public FeatureManager createFeatureManager() {
-                    return featureManager;
+                public void onStartup(ServletContext servletContext) throws ServletException {
+                    servletContext.setInitParameter("org.togglz.FEATURE_MANAGER_PROVIDED", "true");
                 }
             };
         }
@@ -65,17 +61,6 @@ public class TogglzAutoConfiguration {
             String path = properties.getConsole().getPath();
             String urlMapping = (path.endsWith("/") ? path + "*" : path + "/*");
             return new ServletRegistrationBean(new TogglzConsoleServlet(), urlMapping);
-        }
-    }
-
-    @Configuration
-    protected static class TogglzFilterConfiguration {
-
-        @Bean
-        public FilterRegistrationBean togglzFilter() {
-            FilterRegistrationBean registration = new FilterRegistrationBean();
-            registration.setFilter(new TogglzFilter());
-            return registration;
         }
     }
 
@@ -148,11 +133,7 @@ public class TogglzAutoConfiguration {
         public ActivationStrategyProvider activationStrategyProvider() {
             DefaultActivationStrategyProvider provider = new DefaultActivationStrategyProvider();
             if (activationStrategies != null && activationStrategies.size() > 0) {
-                // https://github.com/togglz/togglz/pull/149
-                // provider.addActivationStrategies(activationStrategies);
-                for (ActivationStrategy activationStrategy : activationStrategies) {
-                    provider.addActivationStrategy(activationStrategy);
-                }
+                provider.addActivationStrategies(activationStrategies);
             }
             return provider;
         }

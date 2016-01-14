@@ -16,7 +16,7 @@ apply plugin: "spring-boot"
 
 ext {
     javaVersion = "1.8"
-    togglzVersion = "2.2.0.Final"
+    togglzVersion = "2.3.0-SNAPSHOT"
 }
 
 repositories {
