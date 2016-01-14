@@ -1,4 +1,4 @@
-package com.mycompany;
+package org.togglz.spring.boot.autoconfigure;
 
 import org.togglz.core.repository.property.PropertySource;
 

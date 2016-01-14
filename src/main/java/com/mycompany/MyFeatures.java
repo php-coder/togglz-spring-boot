@@ -7,9 +7,5 @@ import org.togglz.core.context.FeatureContext;
 public enum MyFeatures implements Feature {
 
     @Label("Hello World Feature")
-    HELLO_WORLD;
-
-    public boolean isActive() {
-        return FeatureContext.getFeatureManager().isActive(this);
-    }
+    HELLO_WORLD
 }

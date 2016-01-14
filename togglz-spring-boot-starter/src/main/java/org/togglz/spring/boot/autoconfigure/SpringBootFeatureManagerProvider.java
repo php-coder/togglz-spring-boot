@@ -1,4 +1,4 @@
-package com.mycompany;
+package org.togglz.spring.boot.autoconfigure;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;

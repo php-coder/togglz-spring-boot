@@ -1,4 +1,4 @@
-package com.mycompany;
+package org.togglz.spring.boot.autoconfigure;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,7 +23,6 @@ import org.togglz.core.repository.property.PropertySource;
 import org.togglz.core.spi.ActivationStrategy;
 import org.togglz.core.spi.FeatureProvider;
 import org.togglz.core.user.FeatureUser;
-import org.togglz.core.user.NoOpUserProvider;
 import org.togglz.core.user.SimpleFeatureUser;
 import org.togglz.core.user.UserProvider;
 
@@ -155,9 +154,6 @@ public class TogglzAutoConfiguration {
 
         @Bean
         public StateRepository stateRepository() {
-
-            System.out.println("\n\n\nFEATURES = " + properties.getFeatures());
-
             Map<String, String> features = properties.getFeatures();
             if (features != null && features.size() > 0) {
                 Properties props = new Properties();

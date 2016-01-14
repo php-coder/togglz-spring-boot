@@ -1,4 +1,4 @@
-package com.mycompany;
+package org.togglz.spring.boot.autoconfigure;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.togglz.core.Feature;

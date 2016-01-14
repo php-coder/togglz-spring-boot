@@ -23,8 +23,7 @@ public class HelloController {
     @RequestMapping("/")
     public ResponseEntity index() {
 
-        log.debug("HELLO WORLD feature active (via enum): " + MyFeatures.HELLO_WORLD.isActive());
-        log.debug("HELLO WORLD feature active (via featureManager): " + featureManager.isActive(MyFeatures.HELLO_WORLD));
+        log.debug("HELLO WORLD feature active: " + featureManager.isActive(MyFeatures.HELLO_WORLD));
 
         if (featureManager.isActive(MyFeatures.HELLO_WORLD)) {
             return ResponseEntity.ok().body("Greetings from Spring Boot!");
