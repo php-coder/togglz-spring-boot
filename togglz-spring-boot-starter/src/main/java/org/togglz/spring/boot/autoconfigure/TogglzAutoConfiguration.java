@@ -91,9 +91,7 @@ public class TogglzAutoConfiguration {
             if (stateRepositories.size() == 1) {
                 stateRepository = stateRepositories.get(0);
             } else if (stateRepositories.size() > 1) {
-                StateRepository repository = stateRepositories.get(0);
-                StateRepository[] repositories = stateRepositories.subList(1, stateRepositories.size() - 1).toArray(new StateRepository[stateRepositories.size() - 1]);
-                stateRepository = new CompositeStateRepository(repository, repositories);
+                stateRepository = new CompositeStateRepository(stateRepositories.toArray(new StateRepository[stateRepositories.size()]));
             }
             FeatureManagerBuilder featureManagerBuilder = new FeatureManagerBuilder();
             String name = properties.getFeatureManagerName();
@@ -135,11 +133,7 @@ public class TogglzAutoConfiguration {
         public ActivationStrategyProvider activationStrategyProvider() {
             DefaultActivationStrategyProvider provider = new DefaultActivationStrategyProvider();
             if (activationStrategies != null && activationStrategies.size() > 0) {
-                // https://github.com/togglz/togglz/pull/149
-                // provider.addActivationStrategies(activationStrategies);
-                for (ActivationStrategy activationStrategy : activationStrategies) {
-                    provider.addActivationStrategy(activationStrategy);
-                }
+                provider.addActivationStrategies(activationStrategies);
             }
             return provider;
         }
