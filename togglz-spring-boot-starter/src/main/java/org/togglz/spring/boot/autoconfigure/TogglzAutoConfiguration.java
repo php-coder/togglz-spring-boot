@@ -3,8 +3,6 @@ package org.togglz.spring.boot.autoconfigure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
-import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -26,8 +24,6 @@ import org.togglz.core.user.FeatureUser;
 import org.togglz.core.user.SimpleFeatureUser;
 import org.togglz.core.user.UserProvider;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -37,18 +33,9 @@ import java.util.Properties;
 @EnableConfigurationProperties(TogglzProperties.class)
 public class TogglzAutoConfiguration {
 
-    @Configuration
-    protected static class TogglzContextParamConfiguration {
-
-        @Bean
-        public ServletContextInitializer  togglzServletContextInitializer() {
-            return new ServletContextInitializer() {
-                @Override
-                public void onStartup(ServletContext servletContext) throws ServletException {
-                    servletContext.setInitParameter("org.togglz.FEATURE_MANAGER_PROVIDED", "true");
-                }
-            };
-        }
+    @Bean
+    public TogglzApplicationContextBinderApplicationListener togglzApplicationContextBinderApplicationListener() {
+        return new TogglzApplicationContextBinderApplicationListener();
     }
 
     @Configuration

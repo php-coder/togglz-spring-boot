@@ -16,7 +16,9 @@ togglz:
   feature-manager-name: My Feature Manager
   features:
     HELLO_WORLD: true
-    REVERSE_GREETING: false
+    REVERSE_GREETING: true
+    REVERSE_GREEETING.strategy: gradual
+    REVERSE_GREEETING.param.percentage: 25
 
 ---
 

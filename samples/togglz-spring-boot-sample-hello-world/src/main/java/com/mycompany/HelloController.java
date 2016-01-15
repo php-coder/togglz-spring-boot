@@ -25,6 +25,11 @@ public class HelloController {
     @RequestMapping("/")
     public ResponseEntity index() {
 
+        log.debug("1) featureManager.isActive(" + MyFeatures.HELLO_WORLD + "): " + featureManager.isActive(MyFeatures.HELLO_WORLD));
+        log.debug("2) " + MyFeatures.HELLO_WORLD + ".isActive(): " + MyFeatures.HELLO_WORLD.isActive());
+        log.debug("3) featureManager.isActive(" + MyFeatures.REVERSE_GREETING + "): " + featureManager.isActive(MyFeatures.REVERSE_GREETING));
+        log.debug("4) " + MyFeatures.REVERSE_GREETING + ".isActive(): " + MyFeatures.REVERSE_GREETING.isActive());
+
         boolean active = featureManager.isActive(MyFeatures.HELLO_WORLD);
         boolean reverse = featureManager.isActive(MyFeatures.REVERSE_GREETING);
 

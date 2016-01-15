@@ -11,6 +11,10 @@ public enum MyFeatures implements Feature {
     @Label("Hello World Feature")
     HELLO_WORLD,
 
-    @Label("Hello Tooglz Feature")
+    @Label("Reverse Greeting Feature")
     REVERSE_GREETING;
+
+    public boolean isActive() {
+        return FeatureContext.getFeatureManager().isActive(this);
+    }
 }
