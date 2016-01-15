@@ -1,1 +1,15 @@
-include "togglz-spring-boot-starter"
+def String[] modules = [
+    "togglz-spring-boot-starter"
+]
+
+def String[] samples = [
+    "togglz-spring-boot-sample-hello-world"
+]
+
+include modules
+include samples
+
+samples.each { name ->
+    def p = findProject(":${name}")
+    p.projectDir = new File(settingsDir, "samples/${name}");
+}
