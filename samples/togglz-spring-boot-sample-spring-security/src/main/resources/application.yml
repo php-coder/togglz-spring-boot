@@ -15,7 +15,11 @@ togglz:
   feature-manager-name: My Feature Manager
   features:
     HELLO_WORLD: true
-    REVERSE_GREETING: false
+    REVERSE_GREETING: true
+    REVERSE_GREETING.strategy: username
+    REVERSE_GREETING.param.users: user2, user3
+  security:
+    feature-admin-authority: ROLE_ADMIN
 
 ---
 

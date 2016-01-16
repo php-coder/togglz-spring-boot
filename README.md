@@ -10,6 +10,10 @@ TODO
 
 Run `./gradlew clean :togglz-spring-boot-sample-hello-world:bootRun`
 
+### Hello World
+
+Run `./gradlew clean :togglz-spring-boot-sample-spring-security:bootRun`
+
 ## License
 
 Code is released under version 2.0 of the [Apache License][].

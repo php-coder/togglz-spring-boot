@@ -3,7 +3,8 @@ def String[] modules = [
 ]
 
 def String[] samples = [
-    "togglz-spring-boot-sample-hello-world"
+    "togglz-spring-boot-sample-hello-world",
+    "togglz-spring-boot-sample-spring-security"
 ]
 
 include modules

@@ -1,19 +1,28 @@
 package com.mycompany;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.togglz.core.manager.FeatureManager;
 
 @RestController
 public class HelloController {
 
     private static final String GREETING = "Greetings from Spring Boot!";
 
+    private FeatureManager featureManager;
+
+    @Autowired
+    public HelloController(FeatureManager featureManager) {
+        this.featureManager = featureManager;
+    }
+
     @RequestMapping("/")
     public ResponseEntity index() {
-        if (MyFeatures.HELLO_WORLD.isActive()) {
+        if (featureManager.isActive(MyFeatures.HELLO_WORLD)) {
             StringBuilder sb = new StringBuilder(GREETING);
-            if (MyFeatures.REVERSE_GREETING.isActive()) {
+            if (featureManager.isActive(MyFeatures.REVERSE_GREETING)) {
                 sb.reverse();
             }
             return ResponseEntity.ok().body(sb.toString());

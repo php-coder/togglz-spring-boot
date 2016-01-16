@@ -18,6 +18,7 @@ ext {
     springBootVersion = "1.3.1.RELEASE"
     togglzVersion = "2.3.0-SNAPSHOT"
     servletApiVersion = "3.1.0"
+    springSecurityVersion = "4.0.3.RELEASE"
 }
 
 configure(subprojects) {
@@ -48,6 +49,9 @@ project("togglz-spring-boot-starter") {
         compile("org.togglz:togglz-console:${togglzVersion}")
         compile("org.togglz:togglz-spring-core:${togglzVersion}")
         provided("javax.servlet:javax.servlet-api:$servletApiVersion")
+        optional("org.springframework.security:spring-security-config:${springSecurityVersion}")
+        optional("org.springframework.security:spring-security-web:${springSecurityVersion}")
+        optional("org.togglz:togglz-spring-security:${togglzVersion}")
         provided("org.springframework:spring-web:4.2.4.RELEASE")
         provided("org.springframework.boot:spring-boot-autoconfigure:1.3.1.RELEASE")
     }
@@ -58,13 +62,28 @@ configure(subprojects.findAll { project -> project.name.startsWith("togglz-sprin
     apply plugin: "spring-boot"
 
     dependencies {
-        // compile("org.springframework.boot:spring-boot-devtools")
+        compile("org.springframework.boot:spring-boot-devtools")
         compile("org.springframework.boot:spring-boot-starter-actuator")
         compile("org.springframework.boot:spring-boot-starter-aop")
         compile("org.springframework.boot:spring-boot-starter-web")
         compile project(":togglz-spring-boot-starter")
         testCompile("org.springframework.boot:spring-boot-starter-test")
         testCompile("org.togglz:togglz-junit:${togglzVersion}")
+    }
+}
+
+project("togglz-spring-boot-sample-hello-world") {
+
+    description = "Togglz Spring Boot Sample Hellow World"
+}
+
+project("togglz-spring-boot-sample-spring-security") {
+
+    description = "Togglz Spring Boot Sample Spring Security"
+
+    dependencies {
+        compile("org.springframework.boot:spring-boot-starter-security")
+        compile("org.togglz:togglz-spring-security:${togglzVersion}")
     }
 }
 

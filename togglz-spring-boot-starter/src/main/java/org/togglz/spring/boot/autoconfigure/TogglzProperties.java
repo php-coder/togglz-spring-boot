@@ -13,11 +13,11 @@ public class TogglzProperties {
 
     private Console console = new Console();
 
-    private Class<? extends Feature>[] featureEnums;
-
     private String featureManagerName;
 
     private Map<String,String> features;
+
+    public Security security = new Security();
 
     public boolean isEnabled() {
         return enabled;
@@ -35,14 +35,6 @@ public class TogglzProperties {
         this.enabled = enabled;
     }
 
-    public Class<? extends Feature>[] getFeatureEnums() {
-        return featureEnums;
-    }
-
-    public void setFeatureEnums(Class<? extends Feature>[] featureEnums) {
-        this.featureEnums = featureEnums;
-    }
-
     public String getFeatureManagerName() {
         return featureManagerName;
     }
@@ -57,6 +49,14 @@ public class TogglzProperties {
 
     public void setFeatures(Map<String, String> features) {
         this.features = features;
+    }
+
+    public Security getSecurity() {
+        return security;
+    }
+
+    public void setSecurity(Security security) {
+        this.security = security;
     }
 
     public static class Console {
@@ -79,6 +79,19 @@ public class TogglzProperties {
 
         public void setPath(String path) {
             this.path = path;
+        }
+    }
+
+    public static class Security {
+
+        private String featureAdminAuthority;
+
+        public String getFeatureAdminAuthority() {
+            return featureAdminAuthority;
+        }
+
+        public void setFeatureAdminAuthority(String featureAdminAuthority) {
+            this.featureAdminAuthority = featureAdminAuthority;
         }
     }
 }

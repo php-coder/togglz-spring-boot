@@ -1,16 +1,19 @@
 package org.togglz.spring.boot.autoconfigure;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.togglz.console.TogglzConsoleServlet;
 import org.togglz.core.activation.ActivationStrategyProvider;
 import org.togglz.core.activation.DefaultActivationStrategyProvider;
-import org.togglz.core.manager.EnumBasedFeatureProvider;
 import org.togglz.core.manager.FeatureManager;
 import org.togglz.core.manager.FeatureManagerBuilder;
 import org.togglz.core.repository.StateRepository;
@@ -23,6 +26,7 @@ import org.togglz.core.spi.FeatureProvider;
 import org.togglz.core.user.FeatureUser;
 import org.togglz.core.user.SimpleFeatureUser;
 import org.togglz.core.user.UserProvider;
+import org.togglz.spring.security.SpringSecurityUserProvider;
 
 import java.util.List;
 import java.util.Map;
@@ -96,20 +100,6 @@ public class TogglzAutoConfiguration {
     }
 
     @Configuration
-    @ConditionalOnMissingBean(FeatureProvider.class)
-    @ConditionalOnProperty(name = "togglz.feature-enums")
-    protected static class FeatureProviderConfiguration {
-
-        @Autowired
-        private TogglzProperties properties;
-
-        @Bean
-        public FeatureProvider featureProvider() {
-            return new EnumBasedFeatureProvider(properties.getFeatureEnums());
-        }
-    }
-
-    @Configuration
     @ConditionalOnMissingBean(ActivationStrategyProvider.class)
     protected static class ActivationStrategyProviderConfiguration {
 
@@ -138,7 +128,7 @@ public class TogglzAutoConfiguration {
             Map<String, String> features = properties.getFeatures();
             if (features != null && features.size() > 0) {
                 Properties props = new Properties();
-                props.putAll(properties.getFeatures());
+                props.putAll(features);
                 PropertySource propertySource = new PropertiesPropertySource(props);
                 return new PropertyBasedStateRepository(propertySource);
             }
@@ -147,6 +137,7 @@ public class TogglzAutoConfiguration {
     }
 
     @Configuration
+    @ConditionalOnMissingClass("org.springframework.security.config.annotation.web.configuration.EnableWebSecurity")
     @ConditionalOnMissingBean(UserProvider.class)
     protected static class UserProviderConfiguration {
 
@@ -155,7 +146,7 @@ public class TogglzAutoConfiguration {
 
         @Bean
         public UserProvider userProvider() {
-            // TODO if the application uses spring security we might use a SpringSecurityUserProvider
+            // TODO when to return NoOpUserProvider (in case console not used?)
             // return new NoOpUserProvider();
             return new UserProvider() {
                 @Override
@@ -163,6 +154,20 @@ public class TogglzAutoConfiguration {
                     return new SimpleFeatureUser("admin", true);
                 }
             };
+        }
+    }
+
+    @Configuration
+    @ConditionalOnClass({ EnableWebSecurity.class, AuthenticationEntryPoint.class })
+    @ConditionalOnMissingBean(UserProvider.class)
+    protected static class SpringSecurityUserProviderConfiguration {
+
+        @Autowired
+        private TogglzProperties properties;
+
+        @Bean
+        public UserProvider userProvider() {
+            return new SpringSecurityUserProvider(properties.getSecurity().getFeatureAdminAuthority());
         }
     }
 }
