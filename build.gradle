@@ -90,6 +90,7 @@ project("togglz-spring-boot-sample-spring-security") {
     dependencies {
         compile("org.springframework.boot:spring-boot-starter-security")
         compile("org.togglz:togglz-spring-security:${togglzVersion}")
+        testCompile("org.springframework.security:spring-security-test")
     }
 }
 

@@ -17,6 +17,7 @@
 package com.mycompany;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.togglz.junit.TogglzRule;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -35,10 +37,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class HelloControllerTests {
+public class HelloControllerIntegrationTests {
 
-//    @Rule
-//    public TogglzRule togglzRule = TogglzRule.allEnabled(MyFeatures.class);
+    @Rule
+    public TogglzRule togglzRule = TogglzRule.allDisabled(MyFeatures.class);
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -54,21 +56,26 @@ public class HelloControllerTests {
     }
 
     @Test
-    public void testHelloWorldFeatureEnabled() throws Exception {
-//        togglzRule.enable(MyFeatures.HELLO_WORLD);
-//        assertTrue(MyFeatures.HELLO_WORLD.isActive());
+    public void testHelloWorldFeatureDisabled() throws Exception {
+        togglzRule.disable(MyFeatures.HELLO_WORLD);
+        mockMvc.perform(get(""))
+                .andExpect(status().isNotFound());
+    }
 
+    @Test
+    public void testHelloWorldFeatureEnabled() throws Exception {
+        togglzRule.enable(MyFeatures.HELLO_WORLD);
         mockMvc.perform(get(""))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Greetings from Spring Boot!"));
     }
 
     @Test
-    public void testHelloWorldFeatureDisabled() throws Exception {
-//        togglzRule.disable(MyFeatures.HELLO_WORLD);
-//        assertFalse(MyFeatures.HELLO_WORLD.isActive());
-
+    public void testHelloWorldFeatureAndReverseGreetingEnabled() throws Exception {
+        togglzRule.enable(MyFeatures.HELLO_WORLD);
+        togglzRule.enable(MyFeatures.REVERSE_GREETING);
         mockMvc.perform(get(""))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk())
+                .andExpect(content().string("!tooB gnirpS morf sgniteerG"));
     }
 }

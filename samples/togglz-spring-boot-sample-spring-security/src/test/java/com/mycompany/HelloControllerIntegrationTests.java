@@ -27,6 +27,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -35,10 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class HelloControllerTests {
-
-//    @Rule
-//    public TogglzRule togglzRule = TogglzRule.allEnabled(MyFeatures.class);
+public class HelloControllerIntegrationTests {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -49,26 +48,55 @@ public class HelloControllerTests {
     public void setUpMockMvc() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
+                .apply(springSecurity())
                 .alwaysDo(print())
                 .build();
     }
 
     @Test
-    public void testHelloWorldFeatureEnabled() throws Exception {
-//        togglzRule.enable(MyFeatures.HELLO_WORLD);
-//        assertTrue(MyFeatures.HELLO_WORLD.isActive());
-
+    public void testHelloWorldFeatureWithoutUser() throws Exception {
         mockMvc.perform(get(""))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Greetings from Spring Boot!"));
     }
 
     @Test
-    public void testHelloWorldFeatureDisabled() throws Exception {
-//        togglzRule.disable(MyFeatures.HELLO_WORLD);
-//        assertFalse(MyFeatures.HELLO_WORLD.isActive());
+    public void testHelloWorldFeatureWithAdmin() throws Exception {
+        mockMvc.perform(get("")
+                .with(user("admin")))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Greetings from Spring Boot!"));
+    }
 
-        mockMvc.perform(get(""))
-                .andExpect(status().isNotFound());
+    @Test
+    public void testHelloWorldFeatureWithUser1() throws Exception {
+        mockMvc.perform(get("")
+                .with(user("user1")))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Greetings from Spring Boot!"));
+    }
+
+    @Test
+    public void testHelloWorldFeatureWithUser2() throws Exception {
+        mockMvc.perform(get("")
+                .with(user("user2")))
+                .andExpect(status().isOk())
+                .andExpect(content().string("!tooB gnirpS morf sgniteerG"));
+    }
+
+    @Test
+    public void testHelloWorldFeatureWithUser3() throws Exception {
+        mockMvc.perform(get("")
+                .with(user("user3")))
+                .andExpect(status().isOk())
+                .andExpect(content().string("!tooB gnirpS morf sgniteerG"));
+    }
+
+    @Test
+    public void testHelloWorldFeatureWithUser4() throws Exception {
+        mockMvc.perform(get("")
+                .with(user("user4")))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Greetings from Spring Boot!"));
     }
 }
