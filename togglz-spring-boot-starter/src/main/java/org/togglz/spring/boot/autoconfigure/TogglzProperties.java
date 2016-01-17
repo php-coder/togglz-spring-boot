@@ -16,12 +16,9 @@
 
 package org.togglz.spring.boot.autoconfigure;
 
-import com.sun.istack.internal.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.togglz.core.Feature;
 
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * Configuration properties for Togglz.
@@ -37,7 +34,7 @@ public class TogglzProperties {
 
     private String featureManagerName;
 
-    private Map<String,String> features;
+    private Map<String, String> features;
 
     public Security security = new Security();
 

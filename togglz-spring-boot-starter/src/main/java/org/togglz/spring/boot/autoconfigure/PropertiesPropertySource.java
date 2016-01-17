@@ -78,8 +78,7 @@ public class PropertiesPropertySource implements PropertySource {
         public void setValue(String key, String value) {
             if (value != null) {
                 newValues.setProperty(key, value);
-            }
-            else {
+            } else {
                 newValues.remove(key);
             }
         }

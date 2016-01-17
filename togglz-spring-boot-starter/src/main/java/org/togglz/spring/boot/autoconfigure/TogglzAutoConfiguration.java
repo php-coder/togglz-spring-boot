@@ -180,7 +180,7 @@ public class TogglzAutoConfiguration {
     }
 
     @Configuration
-    @ConditionalOnClass({ EnableWebSecurity.class, AuthenticationEntryPoint.class })
+    @ConditionalOnClass({EnableWebSecurity.class, AuthenticationEntryPoint.class})
     @ConditionalOnMissingBean(UserProvider.class)
     protected static class SpringSecurityUserProviderConfiguration {
 
