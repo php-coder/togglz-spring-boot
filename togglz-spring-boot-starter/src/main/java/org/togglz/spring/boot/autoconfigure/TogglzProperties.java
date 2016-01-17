@@ -16,6 +16,7 @@
 
 package org.togglz.spring.boot.autoconfigure;
 
+import com.sun.istack.internal.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.togglz.core.Feature;
 
@@ -27,7 +28,7 @@ import java.util.Properties;
  *
  * @author Marcel Overdijk
  */
-@ConfigurationProperties("togglz")
+@ConfigurationProperties(prefix = "togglz", ignoreUnknownFields = true)
 public class TogglzProperties {
 
     private boolean enabled = true;
@@ -84,7 +85,7 @@ public class TogglzProperties {
 
         private boolean enabled = true;
 
-        private String path;
+        private String path = "/togglz";
 
         public boolean isEnabled() {
             return enabled;

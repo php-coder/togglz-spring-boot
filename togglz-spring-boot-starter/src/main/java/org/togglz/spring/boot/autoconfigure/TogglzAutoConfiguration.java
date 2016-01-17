@@ -55,7 +55,7 @@ import java.util.Properties;
  * @author Marcel Overdijk
  */
 @Configuration
-@ConditionalOnProperty(name = "togglz.enabled")
+@ConditionalOnProperty(prefix = "togglz", name = "enabled", matchIfMissing = true)
 @EnableConfigurationProperties(TogglzProperties.class)
 public class TogglzAutoConfiguration {
 
@@ -65,7 +65,7 @@ public class TogglzAutoConfiguration {
     }
 
     @Configuration
-    @ConditionalOnProperty(name = "togglz.console.enabled")
+    @ConditionalOnProperty(prefix = "togglz.console", name = "enabled", matchIfMissing = true)
     protected static class TogglzConsoleConfiguration {
 
         @Autowired
