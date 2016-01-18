@@ -55,10 +55,10 @@ project("togglz-spring-boot-starter") {
 
     dependencies {
         compile("org.togglz:togglz-core:${togglzVersion}")
-        compile("org.togglz:togglz-console:${togglzVersion}")
         compile("org.togglz:togglz-spring-core:${togglzVersion}")
         optional("org.springframework.security:spring-security-config:${springSecurityVersion}")
         optional("org.springframework.security:spring-security-web:${springSecurityVersion}")
+        optional("org.togglz:togglz-console:${togglzVersion}")
         optional("org.togglz:togglz-spring-security:${togglzVersion}")
         provided("javax.servlet:javax.servlet-api:$servletApiVersion")
         provided("org.springframework:spring-web:${springVersion}")
@@ -86,6 +86,10 @@ configure(subprojects.findAll { project -> project.name.startsWith("togglz-sprin
 project("togglz-spring-boot-sample-hello-world") {
 
     description = "Togglz Spring Boot Sample Hellow World"
+
+    dependencies {
+        compile("org.togglz:togglz-console:${togglzVersion}")
+    }
 }
 
 project("togglz-spring-boot-sample-spring-security") {
@@ -94,6 +98,7 @@ project("togglz-spring-boot-sample-spring-security") {
 
     dependencies {
         compile("org.springframework.boot:spring-boot-starter-security")
+        compile("org.togglz:togglz-console:${togglzVersion}")
         compile("org.togglz:togglz-spring-security:${togglzVersion}")
         testCompile("org.springframework.security:spring-security-test")
     }
