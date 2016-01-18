@@ -34,6 +34,8 @@ public class TogglzProperties {
 
     private String featureManagerName;
 
+    private String featuresFile;
+
     private Map<String, String> features;
 
     public Security security = new Security();
@@ -60,6 +62,14 @@ public class TogglzProperties {
 
     public void setFeatureManagerName(String featureManagerName) {
         this.featureManagerName = featureManagerName;
+    }
+
+    public String getFeaturesFile() {
+        return featuresFile;
+    }
+
+    public void setFeaturesFile(String featuresFile) {
+        this.featuresFile = featuresFile;
     }
 
     public Map<String, String> getFeatures() {

@@ -25,6 +25,11 @@ ext {
     springSecurityVersion = "4.0.3.RELEASE"
 }
 
+configure(allprojects) {
+
+    group = "com.github.marceloverdijk"
+}
+
 configure(subprojects) {
 
     apply plugin: "java"
