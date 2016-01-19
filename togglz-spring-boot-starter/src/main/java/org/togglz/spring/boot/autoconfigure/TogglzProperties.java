@@ -38,8 +38,6 @@ public class TogglzProperties {
 
     private Map<String, String> features;
 
-    public Security security = new Security();
-
     public boolean isEnabled() {
         return enabled;
     }
@@ -80,19 +78,15 @@ public class TogglzProperties {
         this.features = features;
     }
 
-    public Security getSecurity() {
-        return security;
-    }
-
-    public void setSecurity(Security security) {
-        this.security = security;
-    }
-
     public static class Console {
 
         private boolean enabled = true;
 
         private String path = "/togglz";
+
+        private boolean requiresFeatureAdmin = true;
+
+        private String featureAdminAuthority;
 
         public boolean isEnabled() {
             return enabled;
@@ -109,11 +103,14 @@ public class TogglzProperties {
         public void setPath(String path) {
             this.path = path;
         }
-    }
 
-    public static class Security {
+        public boolean isRequiresFeatureAdmin() {
+            return requiresFeatureAdmin;
+        }
 
-        private String featureAdminAuthority;
+        public void setRequiresFeatureAdmin(boolean requiresFeatureAdmin) {
+            this.requiresFeatureAdmin = requiresFeatureAdmin;
+        }
 
         public String getFeatureAdminAuthority() {
             return featureAdminAuthority;

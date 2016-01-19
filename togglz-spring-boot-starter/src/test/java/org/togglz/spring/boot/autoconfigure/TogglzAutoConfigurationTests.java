@@ -39,8 +39,6 @@ import org.togglz.core.repository.property.PropertyBasedStateRepository;
 import org.togglz.core.spi.ActivationStrategy;
 import org.togglz.core.spi.FeatureProvider;
 import org.togglz.core.user.FeatureUser;
-import org.togglz.core.user.NoOpUserProvider;
-import org.togglz.core.user.UserProvider;
 import org.togglz.spring.util.ContextClassLoaderApplicationContextHolder;
 
 import static org.hamcrest.Matchers.*;
@@ -82,7 +80,6 @@ public class TogglzAutoConfigurationTests {
         assertThat(featureManager.getFeatures(), hasItem(MyFeatures.FEATURE_ONE));
         assertThat(featureManager.getFeatures(), hasItem(MyFeatures.FEATURE_TWO));
         assertThat(this.context.getBean(StateRepository.class), is(instanceOf(InMemoryStateRepository.class)));
-        // TODO assertThat(this.context.getBean(UserProvider.class), is(instanceOf(NoOpUserProvider.class)));
         assertThat(this.context.getBeansOfType(ServletRegistrationBean.class).size(), is(equalTo(1)));
         assertThat(this.context.getBean(ServletRegistrationBean.class).getUrlMappings(), hasItems("/togglz/*"));
         assertThat(ContextClassLoaderApplicationContextHolder.get(), is((ApplicationContext) this.context));
@@ -137,7 +134,6 @@ public class TogglzAutoConfigurationTests {
         assertThat(this.context.getBeansOfType(ServletRegistrationBean.class).size(), is(1));
         assertThat(this.context.getBean(ServletRegistrationBean.class).getUrlMappings(), hasItems("/custom/*"));
     }
-
 
     @Test
     public void customFeatureManagerName() {

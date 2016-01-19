@@ -42,10 +42,12 @@ import org.togglz.core.repository.property.PropertySource;
 import org.togglz.core.spi.ActivationStrategy;
 import org.togglz.core.spi.FeatureProvider;
 import org.togglz.core.user.FeatureUser;
+import org.togglz.core.user.NoOpUserProvider;
 import org.togglz.core.user.SimpleFeatureUser;
 import org.togglz.core.user.UserProvider;
 import org.togglz.spring.security.SpringSecurityUserProvider;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -73,11 +75,25 @@ public class TogglzAutoConfiguration {
         @Autowired
         private TogglzProperties properties;
 
+        @Autowired
+        private UserProvider userProvider;
+
         @Bean
         public ServletRegistrationBean togglzConsole() {
             String path = properties.getConsole().getPath();
             String urlMapping = (path.endsWith("/") ? path + "*" : path + "/*");
-            return new ServletRegistrationBean(new TogglzConsoleServlet(), urlMapping);
+            TogglzConsoleServlet servlet;
+            if (userProvider instanceof NoOpUserProvider || !properties.getConsole().isRequiresFeatureAdmin()) {
+                servlet = new TogglzConsoleServlet() {
+                    @Override
+                    protected boolean isFeatureAdmin(HttpServletRequest request) {
+                        return true;
+                    }
+                };
+            } else {
+                servlet = new TogglzConsoleServlet();
+            }
+            return new ServletRegistrationBean(servlet, urlMapping);
         }
     }
 
@@ -174,14 +190,7 @@ public class TogglzAutoConfiguration {
 
         @Bean
         public UserProvider userProvider() {
-            // TODO when to return NoOpUserProvider (in case console not used?)
-            // return new NoOpUserProvider();
-            return new UserProvider() {
-                @Override
-                public FeatureUser getCurrentUser() {
-                    return new SimpleFeatureUser("admin", true);
-                }
-            };
+            return new NoOpUserProvider();
         }
     }
 
@@ -195,7 +204,7 @@ public class TogglzAutoConfiguration {
 
         @Bean
         public UserProvider userProvider() {
-            return new SpringSecurityUserProvider(properties.getSecurity().getFeatureAdminAuthority());
+            return new SpringSecurityUserProvider(properties.getConsole().getFeatureAdminAuthority());
         }
     }
 }
