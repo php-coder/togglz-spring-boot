@@ -71,12 +71,12 @@ The following properties can be specified inside your application.properties/app
 	    enabled: true # Enable admin console.
 	    path: /togglz # The path of the admin console when enabled.
 	  feature-manager-name: # The name of the feature manager
-	  features:
+	  features: # The feature states
 	    HELLO_WORLD: true
 	    REVERSE_GREETING: true
 	    REVERSE_GREETING.strategy: username
 	    REVERSE_GREETING.param.users: user2, user3
-	  features-file: # The path to the features file.
+	  features-file: # The path to the features file that contains the feature states.
 	  security:
 	    feature-admin-authority: ROLE_ADMIN # The name of the authority that is allowed to access the admin console.
 
