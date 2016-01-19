@@ -53,6 +53,8 @@ project("togglz-spring-boot-starter") {
 
     description = "Togglz Spring Boot Starter"
 
+    apply plugin: "maven"
+
     dependencies {
         compile("org.togglz:togglz-core:${togglzVersion}")
         compile("org.togglz:togglz-spring-core:${togglzVersion}")
