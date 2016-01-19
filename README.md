@@ -84,7 +84,7 @@ The following properties can be specified inside your application.properties/app
 
 ### Hello World
 
-The Hell0 World sample is a sample using basic auto configuration.
+The Hello World sample is a sample using basic auto configuration.
 
 Run `./gradlew clean :togglz-spring-boot-sample-hello-world:bootRun`
 
