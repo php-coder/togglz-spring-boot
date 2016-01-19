@@ -58,6 +58,8 @@ example below of the application.yml. Note this is an Spring Boot in-memory impl
 does not persist edited features. If persistence is needed `FileBasedStateRepository`, `JDBCStateRepository` or any
 other applicable `StateRepository` can be added to the application context manually. When you want to use a
 `FileBasedStateRepository` you can also use this by providing a `togglz.features-file` application property.
+If the `togglz.features-file` is provided this will take precedence over features provided via application properties
+and effectively ignoring `togglz.features`.
 
 ## Application Properties
 
@@ -76,7 +78,7 @@ The following properties can be specified inside your application.properties/app
 	    REVERSE_GREETING.param.users: user2, user3
 	  features-file: # The path to the features file.
 	  security:
-	    feature-admin-authority: ROLE_ADMIN
+	    feature-admin-authority: ROLE_ADMIN # The name of the authority that is allowed to access the admin console.
 
 ## Samples
 
