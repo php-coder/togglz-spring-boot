@@ -98,6 +98,16 @@ Run `./gradlew clean :togglz-spring-boot-sample-spring-security:bootRun`
 
 The sample project also contains `MockMvc` integration tests.
 
+## Building from Source
+
+### Check out sources
+
+`git clone git@github.com:marceloverdijk/togglz-spring-boot.git`
+
+### Install starter jar into your local Maven cache
+
+`./gradlew install`
+
 ## License
 
 Code is released under version 2.0 of the [Apache License][].
