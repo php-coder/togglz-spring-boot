@@ -8,29 +8,10 @@ logging:
     com.mycompany: DEBUG
     org.togglz: DEBUG
 togglz:
-  enabled: true
   console:
-    enabled: true
-    path: /togglz
     feature-admin-authority: ROLE_ADMIN
   feature-manager-name: My Feature Manager
-  features:
-    HELLO_WORLD: true
-    REVERSE_GREETING: true
-    REVERSE_GREETING.strategy: username
-    REVERSE_GREETING.param.users: user2, user3
-
----
-
-spring:
-  profiles: dev
-
----
-
-spring:
-  profiles: test
-
----
-
-spring:
-  profiles: prod
+  features-file: classpath:/features.properties
+  cache:
+    enable: true
+    time-to-live: 10000

@@ -17,6 +17,7 @@
 package org.togglz.spring.boot.autoconfigure;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.togglz.core.Feature;
 
 import java.util.Map;
 
@@ -30,24 +31,28 @@ public class TogglzProperties {
 
     private boolean enabled = true;
 
-    private Console console = new Console();
+    private Class<? extends Feature>[] featureEnums;
 
     private String featureManagerName;
 
+    private Map<String, String> features;
+
     private String featuresFile;
 
-    private Map<String, String> features;
+    private Cache cache = new Cache();
+
+    private Console console = new Console();
 
     public boolean isEnabled() {
         return enabled;
     }
 
-    public Console getConsole() {
-        return console;
+    public Class<? extends Feature>[] getFeatureEnums() {
+        return featureEnums;
     }
 
-    public void setConsole(Console console) {
-        this.console = console;
+    public void setFeatureEnums(Class<? extends Feature>[] featureEnums) {
+        this.featureEnums = featureEnums;
     }
 
     public void setEnabled(boolean enabled) {
@@ -62,6 +67,14 @@ public class TogglzProperties {
         this.featureManagerName = featureManagerName;
     }
 
+    public Map<String, String> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(Map<String, String> features) {
+        this.features = features;
+    }
+
     public String getFeaturesFile() {
         return featuresFile;
     }
@@ -70,12 +83,43 @@ public class TogglzProperties {
         this.featuresFile = featuresFile;
     }
 
-    public Map<String, String> getFeatures() {
-        return features;
+    public Cache getCache() {
+        return cache;
     }
 
-    public void setFeatures(Map<String, String> features) {
-        this.features = features;
+    public void setCache(Cache cache) {
+        this.cache = cache;
+    }
+
+    public Console getConsole() {
+        return console;
+    }
+
+    public void setConsole(Console console) {
+        this.console = console;
+    }
+
+    public static class Cache {
+
+        private boolean enabled = false;
+
+        private long timeToLive = 0;
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public long getTimeToLive() {
+            return timeToLive;
+        }
+
+        public void setTimeToLive(long timeToLive) {
+            this.timeToLive = timeToLive;
+        }
     }
 
     public static class Console {

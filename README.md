@@ -41,6 +41,8 @@ The only thing that needs to provided is a `FeaturesProvider` e.g.:
         return new EnumBasedFeatureProvider(MyFeatures.class);
     }
 
+Alternatively the `togglz.feature-enums` property can be provided so even the `FeatureProvider` is not needed.
+
 By default the auto configuration will use a `NoOpUserProvider` and when Spring Security is used a
 `SpringSecurityUserProvider`.
 
@@ -67,11 +69,7 @@ The following properties can be specified inside your application.properties/app
 
 	togglz:
 	  enabled: true # Enable Togglz for the application.
-	  console:
-	    enabled: true # Enable admin console.
-	    path: /togglz # The path of the admin console when enabled.
-	    requires-feature-admin: true: Indicates if the admin console should be be protected with the feature admin authority. Default true but false if NoOpUserProvider us used.
-	    feature-admin-authority: ROLE_ADMIN # The name of the authority that is allowed to access the admin console.
+	  feature-enums: # Comma-separated list of fully-qualified feature enum class names.
 	  feature-manager-name: # The name of the feature manager
 	  features: # The feature states
 	    HELLO_WORLD: true
@@ -79,6 +77,14 @@ The following properties can be specified inside your application.properties/app
 	    REVERSE_GREETING.strategy: username
 	    REVERSE_GREETING.param.users: user2, user3
 	  features-file: # The path to the features file that contains the feature states.
+	  cache:
+	    enabled: false # Enable feature state caching.
+	    time-to-live: 0 # The time in milliseconds after which a cache entry will expire.
+	  console:
+	    enabled: true # Enable admin console.
+	    path: /togglz # The path of the admin console when enabled.
+	    requires-feature-admin: true: Indicates if the admin console should be be protected with the feature admin authority. Default true but false if NoOpUserProvider us used.
+	    feature-admin-authority: ROLE_ADMIN # The name of the authority that is allowed to access the admin console.
 
 ## Samples
 

@@ -46,8 +46,8 @@ public class Application {
             http
                     .authorizeRequests()
                         .anyRequest()
-                        //.authenticated()
-                        .permitAll()
+                        .authenticated()
+                        //.permitAll()
                         .and()
                     .csrf()
                         .disable()

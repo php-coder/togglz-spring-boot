@@ -18,22 +18,24 @@ package org.togglz.spring.boot.autoconfigure;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.togglz.console.TogglzConsoleServlet;
 import org.togglz.core.activation.ActivationStrategyProvider;
 import org.togglz.core.activation.DefaultActivationStrategyProvider;
+import org.togglz.core.manager.EnumBasedFeatureProvider;
 import org.togglz.core.manager.FeatureManager;
 import org.togglz.core.manager.FeatureManagerBuilder;
 import org.togglz.core.repository.StateRepository;
+import org.togglz.core.repository.cache.CachingStateRepository;
 import org.togglz.core.repository.composite.CompositeStateRepository;
 import org.togglz.core.repository.file.FileBasedStateRepository;
 import org.togglz.core.repository.mem.InMemoryStateRepository;
@@ -49,6 +51,7 @@ import org.togglz.spring.security.SpringSecurityUserProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -69,31 +72,16 @@ public class TogglzAutoConfiguration {
     }
 
     @Configuration
-    @ConditionalOnProperty(prefix = "togglz.console", name = "enabled", matchIfMissing = true)
-    protected static class TogglzConsoleConfiguration {
+    @ConditionalOnMissingBean(FeatureProvider.class)
+    @ConditionalOnProperty(name = "togglz.feature-enums")
+    protected static class FeatureProviderConfiguration {
 
         @Autowired
         private TogglzProperties properties;
 
-        @Autowired
-        private UserProvider userProvider;
-
         @Bean
-        public ServletRegistrationBean togglzConsole() {
-            String path = properties.getConsole().getPath();
-            String urlMapping = (path.endsWith("/") ? path + "*" : path + "/*");
-            TogglzConsoleServlet servlet;
-            if (userProvider instanceof NoOpUserProvider || !properties.getConsole().isRequiresFeatureAdmin()) {
-                servlet = new TogglzConsoleServlet() {
-                    @Override
-                    protected boolean isFeatureAdmin(HttpServletRequest request) {
-                        return true;
-                    }
-                };
-            } else {
-                servlet = new TogglzConsoleServlet();
-            }
-            return new ServletRegistrationBean(servlet, urlMapping);
+        public FeatureProvider featureProvider() {
+            return new EnumBasedFeatureProvider(properties.getFeatureEnums());
         }
     }
 
@@ -161,22 +149,31 @@ public class TogglzAutoConfiguration {
     protected static class StateRepositoryConfiguration {
 
         @Autowired
+        private ResourceLoader resourceLoader = new DefaultResourceLoader();
+
+        @Autowired
         private TogglzProperties properties;
 
         @Bean
-        public StateRepository stateRepository() {
+        public StateRepository stateRepository() throws IOException {
+            StateRepository stateRepository;
+            Map<String, String> features = properties.getFeatures();
             String featuresFile = properties.getFeaturesFile();
             if (featuresFile != null) {
-                return new FileBasedStateRepository(new File(featuresFile));
-            }
-            Map<String, String> features = properties.getFeatures();
-            if (features != null && features.size() > 0) {
+                Resource resource = this.resourceLoader.getResource(featuresFile);
+                stateRepository = new FileBasedStateRepository(resource.getFile());
+            } else if (features != null && features.size() > 0) {
                 Properties props = new Properties();
                 props.putAll(features);
                 PropertySource propertySource = new PropertiesPropertySource(props);
-                return new PropertyBasedStateRepository(propertySource);
+                stateRepository = new PropertyBasedStateRepository(propertySource);
+            } else {
+                stateRepository = new InMemoryStateRepository();
             }
-            return new InMemoryStateRepository();
+            if (properties.getCache().isEnabled()) {
+                stateRepository = new CachingStateRepository(stateRepository, properties.getCache().getTimeToLive());
+            }
+            return stateRepository;
         }
     }
 
@@ -205,6 +202,36 @@ public class TogglzAutoConfiguration {
         @Bean
         public UserProvider userProvider() {
             return new SpringSecurityUserProvider(properties.getConsole().getFeatureAdminAuthority());
+        }
+    }
+
+    @Configuration
+    @ConditionalOnWebApplication
+    @ConditionalOnProperty(prefix = "togglz.console", name = "enabled", matchIfMissing = true)
+    protected static class TogglzConsoleConfiguration {
+
+        @Autowired
+        private TogglzProperties properties;
+
+        @Autowired
+        private UserProvider userProvider;
+
+        @Bean
+        public ServletRegistrationBean togglzConsole() {
+            String path = properties.getConsole().getPath();
+            String urlMapping = (path.endsWith("/") ? path + "*" : path + "/*");
+            TogglzConsoleServlet servlet;
+            if (userProvider instanceof NoOpUserProvider || !properties.getConsole().isRequiresFeatureAdmin()) {
+                servlet = new TogglzConsoleServlet() {
+                    @Override
+                    protected boolean isFeatureAdmin(HttpServletRequest request) {
+                        return true;
+                    }
+                };
+            } else {
+                servlet = new TogglzConsoleServlet();
+            }
+            return new ServletRegistrationBean(servlet, urlMapping);
         }
     }
 }

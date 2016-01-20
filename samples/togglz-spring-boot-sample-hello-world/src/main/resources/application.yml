@@ -8,26 +8,7 @@ logging:
     com.mycompany: DEBUG
     org.togglz: DEBUG
 togglz:
-  enabled: true
-  console:
-    enabled: true
-    path: /togglz
-  feature-manager-name: My Feature Manager
+  feature-enums: com.mycompany.MyFeatures
   features:
     HELLO_WORLD: true
     REVERSE_GREETING: false
-
----
-
-spring:
-  profiles: dev
-
----
-
-spring:
-  profiles: test
-
----
-
-spring:
-  profiles: prod
