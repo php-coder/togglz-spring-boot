@@ -85,7 +85,7 @@ configure(subprojects.findAll { project -> project.name.startsWith("togglz-sprin
 
 project("togglz-spring-boot-sample-hello-world") {
 
-    description = "Togglz Spring Boot Sample Hellow World"
+    description = "Togglz Spring Boot Sample Hello World"
 
     dependencies {
         compile("org.togglz:togglz-console:${togglzVersion}")
