@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-Add the Togglz Spring Boot dependency to your project:
+Add the Togglz Spring Boot Starter dependency to your project:
 
     compile("com.github.marceloverdijk:togglz-spring-boot-starter")
 
@@ -15,7 +15,7 @@ Optionally add the Tooglz Admin Console, Togglz Spring Security and Togglz JUnit
     compile("org.togglz:togglz-spring-security:${togglzVersion}")
     testCompile("org.togglz:togglz-junit:${togglzVersion}")
 
-Note that the Tooglz Spring Boot Starter currently requires Togglz version 2.3.0-SNAPSHOT.
+Note that the Tooglz Spring Boot Starter currently requires Togglz version `2.3.0-SNAPSHOT`.
 
 ## Auto Configuration
 
