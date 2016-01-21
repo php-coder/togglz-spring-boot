@@ -43,14 +43,11 @@ import org.togglz.core.repository.property.PropertyBasedStateRepository;
 import org.togglz.core.repository.property.PropertySource;
 import org.togglz.core.spi.ActivationStrategy;
 import org.togglz.core.spi.FeatureProvider;
-import org.togglz.core.user.FeatureUser;
 import org.togglz.core.user.NoOpUserProvider;
-import org.togglz.core.user.SimpleFeatureUser;
 import org.togglz.core.user.UserProvider;
 import org.togglz.spring.security.SpringSecurityUserProvider;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -207,6 +204,7 @@ public class TogglzAutoConfiguration {
 
     @Configuration
     @ConditionalOnWebApplication
+    @ConditionalOnClass(TogglzConsoleServlet.class)
     @ConditionalOnProperty(prefix = "togglz.console", name = "enabled", matchIfMissing = true)
     protected static class TogglzConsoleConfiguration {
 

@@ -88,9 +88,17 @@ The following properties can be specified inside your application.properties/app
 
 ## Samples
 
+### Simple
+
+The Simple sample is a standalone application sample using basic Togglz auto configuration.
+It prints (depending on features enabled) a greeting to the console every 5 seconds.
+As it is standalone application it does not have the Togglz admin console.
+
+Run `./gradlew clean :togglz-spring-boot-sample-simple:bootRun`
+
 ### Hello World
 
-The Hello World sample is a sample using basic auto configuration.
+The Hello World sample is a web application sample using basic Togglz auto configuration.
 
 Run `./gradlew clean :togglz-spring-boot-sample-hello-world:bootRun`
 
@@ -98,7 +106,7 @@ The sample project also contains `MockMvc` integration tests.
 
 ### Spring Security
 
-The Spring Security sample demonstrates enabling/disabling features based on various users.
+The Spring Security sample is a web application demonstrating enabling/disabling features based on various users.
 
 Run `./gradlew clean :togglz-spring-boot-sample-spring-security:bootRun`
 

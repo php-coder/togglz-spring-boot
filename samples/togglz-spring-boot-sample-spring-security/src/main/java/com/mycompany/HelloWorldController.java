@@ -23,14 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.togglz.core.manager.FeatureManager;
 
 @RestController
-public class HelloController {
+public class HelloWorldController {
 
     private static final String GREETING = "Greetings from Spring Boot!";
 
     private FeatureManager featureManager;
 
     @Autowired
-    public HelloController(FeatureManager featureManager) {
+    public HelloWorldController(FeatureManager featureManager) {
         this.featureManager = featureManager;
     }
 
