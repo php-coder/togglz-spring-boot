@@ -91,7 +91,8 @@ The following properties can be specified inside your application.properties/app
 
 ## TODO
 
-  * Improved security of admin console (similar like H2 console).
+  * Add improved security of admin console (similar like H2 console).
+  * Add Togglz actuator endpoint for viewing feature states.
   * ..
 
 ## Samples
