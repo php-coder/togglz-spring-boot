@@ -15,6 +15,8 @@ Optionally add the Tooglz Admin Console, Togglz Spring Security and Togglz JUnit
     compile("org.togglz:togglz-spring-security:${togglzVersion}")
     testCompile("org.togglz:togglz-junit:${togglzVersion}")
 
+Note that the Tooglz Spring Boot Starter currently requires Togglz version 2.3.0-SNAPSHOT.
+
 ## Auto Configuration
 
 The `togglz-spring-boot-starter` will trigger the Togglz Spring Boot auto configuration.
