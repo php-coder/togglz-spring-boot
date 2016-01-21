@@ -9,10 +9,11 @@ Add the Togglz Spring Boot Starter dependency to your project:
 Adding the `togglz-spring-boot-starter` dependency will add automatically `togglz-code` and `togglz-spring-code` modules
 to your project.
 
-Optionally add the Tooglz Admin Console, Togglz Spring Security and Togglz JUnit Testing Support dependencies:
+Optionally add the Tooglz Admin Console, Togglz Spring Security, Thymeleaf Togglz Dialect and Togglz JUnit Testing Support dependencies:
 
     compile("org.togglz:togglz-console:${togglzVersion}")
     compile("org.togglz:togglz-spring-security:${togglzVersion}")
+    compile("com.github.heneke.thymeleaf:thymeleaf-extras-togglz:${thymeleafTogglzVersion}")
     testCompile("org.togglz:togglz-junit:${togglzVersion}")
 
 Note that the Tooglz Spring Boot Starter currently requires Togglz version `2.3.0-SNAPSHOT`.
@@ -113,6 +114,13 @@ The Spring Security sample is a web application demonstrating enabling/disabling
 Run `./gradlew clean :togglz-spring-boot-sample-spring-security:bootRun`
 
 The sample project also contains `MockMvc` integration tests.
+
+### Thymeleaf
+
+The Thymeleaf sample is a web application sample using basic Togglz auto configuration.
+It demonstrated the auto configuration of the Thymeleaf Togglz Dialect.
+
+Run `./gradlew clean :togglz-spring-boot-sample-thymeleaf:bootRun`
 
 ## Building from Source
 

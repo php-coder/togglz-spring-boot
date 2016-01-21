@@ -1,0 +1,10 @@
+spring.thymeleaf.cache: false
+logging:
+  level:
+    com.mycompany: DEBUG
+    org.togglz: DEBUG
+togglz:
+  feature-enums: com.mycompany.MyFeatures
+  features:
+    HELLO_WORLD: true
+    REVERSE_GREETING: false

@@ -16,6 +16,7 @@
 
 package org.togglz.spring.boot.autoconfigure;
 
+import com.github.heneke.thymeleaf.togglz.TogglzDialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.*;
@@ -230,6 +231,17 @@ public class TogglzAutoConfiguration {
                 servlet = new TogglzConsoleServlet();
             }
             return new ServletRegistrationBean(servlet, urlMapping);
+        }
+    }
+
+    @Configuration
+    @ConditionalOnClass(TogglzDialect.class)
+    protected static class ThymeleafTogglzDialectConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean
+        public TogglzDialect togglzDialect() {
+            return new TogglzDialect();
         }
     }
 }
