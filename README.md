@@ -89,6 +89,11 @@ The following properties can be specified inside your application.properties/app
 	    requires-feature-admin: true: Indicates if the admin console should be be protected with the feature admin authority. Default true but false if NoOpUserProvider us used.
 	    feature-admin-authority: ROLE_ADMIN # The name of the authority that is allowed to access the admin console.
 
+## TODO
+
+  * Improved security of admin console (similar like H2 console).
+  * ..
+
 ## Samples
 
 ### Simple
