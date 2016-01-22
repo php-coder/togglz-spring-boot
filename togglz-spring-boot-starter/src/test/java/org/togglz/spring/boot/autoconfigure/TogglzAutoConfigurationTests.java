@@ -83,7 +83,7 @@ public class TogglzAutoConfigurationTests {
         assertThat(featureManager.getFeatures(), hasItem(MyFeatures.FEATURE_TWO));
         assertThat(this.context.getBean(StateRepository.class), is(instanceOf(InMemoryStateRepository.class)));
         assertThat(this.context.getBeansOfType(ServletRegistrationBean.class).size(), is(equalTo(1)));
-        assertThat(this.context.getBean(ServletRegistrationBean.class).getUrlMappings(), hasItems("/togglz/*"));
+        assertThat(this.context.getBean(ServletRegistrationBean.class).getUrlMappings(), hasItems("/togglz-console/*"));
         assertThat(ContextClassLoaderApplicationContextHolder.get(), is((ApplicationContext) this.context));
         assertThat(FeatureContext.getFeatureManager(), is(sameInstance(featureManager)));
     }

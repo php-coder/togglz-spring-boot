@@ -126,7 +126,7 @@ public class TogglzProperties {
 
         private boolean enabled = true;
 
-        private String path = "/togglz";
+        private String path = "/togglz-console";
 
         private boolean requiresFeatureAdmin = true;
 

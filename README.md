@@ -85,7 +85,7 @@ The following properties can be specified inside your application.properties/app
 	    time-to-live: 0 # The time in milliseconds after which a cache entry will expire.
 	  console:
 	    enabled: true # Enable admin console.
-	    path: /togglz # The path of the admin console when enabled.
+	    path: /togglz-console # The path of the admin console when enabled.
 	    requires-feature-admin: true: Indicates if the admin console should be be protected with the feature admin authority. Default true but false if NoOpUserProvider us used.
 	    feature-admin-authority: ROLE_ADMIN # The name of the authority that is allowed to access the admin console.
 
