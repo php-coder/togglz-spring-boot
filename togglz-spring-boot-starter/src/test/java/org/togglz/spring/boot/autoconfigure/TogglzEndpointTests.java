@@ -16,19 +16,18 @@
 
 package org.togglz.spring.boot.autoconfigure;
 
-import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.togglz.core.Feature;
 import org.togglz.core.manager.EnumBasedFeatureProvider;
-import org.togglz.core.manager.FeatureManager;
 import org.togglz.core.spi.FeatureProvider;
+
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -43,62 +42,54 @@ public class TogglzEndpointTests {
 
     private AnnotationConfigApplicationContext context;
 
-    @Before
-    public void setup() {
-        this.context = new AnnotationConfigApplicationContext();
-    }
-
-    private void registerAndRefresh(Class<?>... annotatedClasses) {
-        this.context.register(annotatedClasses);
-        this.context.refresh();
+    @After
+    public void tearDown() {
+        if (this.context != null) {
+            this.context.close();
+        }
     }
 
     @Test
     public void invoke() throws Exception {
-        EnvironmentTestUtils.addEnvironment(this.context, "togglz.features.FEATURE_ONE: false");
-        EnvironmentTestUtils.addEnvironment(this.context, "togglz.features.FEATURE_TWO: true");
-        EnvironmentTestUtils.addEnvironment(this.context, "togglz.features.FEATURE_TWO.strategy: test");
-        EnvironmentTestUtils.addEnvironment(this.context, "togglz.features.FEATURE_TWO.param.p1: foo");
-        EnvironmentTestUtils.addEnvironment(this.context, "togglz.features.FEATURE_TWO.param.p2: bar");
-        registerAndRefresh(JacksonAutoConfiguration.class, Config.class);
-        assertThat(getEndpointBean().invoke().size(), is(2));
-        assertThat(getEndpointBean().invoke().get(0).getName(), is("FEATURE_ONE"));
-        assertThat(getEndpointBean().invoke().get(0).isEnabled(), is(false));
-        assertThat(getEndpointBean().invoke().get(0).getStrategy(), is(nullValue()));
-        assertThat(getEndpointBean().invoke().get(0).getParams().size(), is(0));
-        assertThat(getEndpointBean().invoke().get(1).getName(), is("FEATURE_TWO"));
-        assertThat(getEndpointBean().invoke().get(1).isEnabled(), is(true));
-        assertThat(getEndpointBean().invoke().get(1).getStrategy(), is("test"));
-        assertThat(getEndpointBean().invoke().get(1).getParams().size(), is(2));
-        assertThat(getEndpointBean().invoke().get(1).getParams().get("p1"), is("foo"));
-        assertThat(getEndpointBean().invoke().get(1).getParams().get("p2"), is("bar"));
+        load(new Class[]{JacksonAutoConfiguration.class, TogglzAutoConfiguration.class, FeatureProviderConfig.class},
+                "togglz.features.FEATURE_ONE: true",
+                "togglz.features.FEATURE_TWO: false",
+                "togglz.features.FEATURE_TWO.strategy: release-date",
+                "togglz.features.FEATURE_TWO.param.date: 2016-07-01",
+                "togglz.features.FEATURE_TWO.param.time: 08:30:00");
+        TogglzEndpoint endpoint = this.context.getBean(TogglzEndpoint.class);
+        List<TogglzEndpoint.TogglzFeature> features = endpoint.invoke();
+        assertThat(features.size(), is(2));
+        assertThat(features.get(0).getName(), is("FEATURE_ONE"));
+        assertThat(features.get(0).isEnabled(), is(true));
+        assertThat(features.get(0).getStrategy(), is(nullValue()));
+        assertThat(features.get(0).getParams().size(), is(0));
+        assertThat(features.get(1).getName(), is("FEATURE_TWO"));
+        assertThat(features.get(1).isEnabled(), is(false));
+        assertThat(features.get(1).getStrategy(), is("release-date"));
+        assertThat(features.get(1).getParams().size(), is(2));
+        assertThat(features.get(1).getParams().get("date"), is("2016-07-01"));
+        assertThat(features.get(1).getParams().get("time"), is("08:30:00"));
     }
 
-    private TogglzEndpoint getEndpointBean() {
-        return this.context.getBean(TogglzEndpoint.class);
+    private void load(Class<?>[] configs, String... environment) {
+        this.context = new AnnotationConfigApplicationContext();
+        this.context.register(configs);
+        EnvironmentTestUtils.addEnvironment(this.context, environment);
+        this.context.refresh();
     }
 
-    public enum MyFeatures implements Feature {
-
+    protected enum MyFeatures implements Feature {
         FEATURE_ONE,
         FEATURE_TWO;
     }
 
     @Configuration
-    @Import(TogglzAutoConfiguration.class)
-    public static class Config {
-
-        @Autowired
-        private FeatureManager featureManager;
+    protected static class FeatureProviderConfig {
 
         @Bean
         public FeatureProvider featureProvider() {
             return new EnumBasedFeatureProvider(MyFeatures.class);
-        }
-
-        @Bean
-        public TogglzEndpoint endpoint() {
-            return new TogglzEndpoint(this.featureManager);
         }
     }
 }

@@ -235,6 +235,7 @@ public class TogglzAutoConfiguration {
     }
 
     @Configuration
+    @ConditionalOnMissingBean(TogglzEndpoint.class)
     @ConditionalOnProperty(prefix = "togglz.endpoint", name = "enabled", matchIfMissing = true)
     protected static class TogglzEndpointConfiguration {
 
@@ -242,7 +243,6 @@ public class TogglzAutoConfiguration {
         private TogglzProperties properties;
 
         @Bean
-        @ConditionalOnMissingBean
         public TogglzEndpoint togglzEndpoint(FeatureManager featureManager) {
             return new TogglzEndpoint(featureManager);
         }
