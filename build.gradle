@@ -22,6 +22,7 @@ ext {
     springSecurityVersion  = "4.0.3.RELEASE"
     thymeleafTogglzVersion = "1.0.1.RELEASE"
     togglzVersion          = "2.3.0-SNAPSHOT"
+    validationApiVersion   = "1.1.0.Final"
 }
 
 configure(allprojects) {
@@ -58,6 +59,7 @@ project("togglz-spring-boot-starter") {
         compile("org.togglz:togglz-core:${togglzVersion}")
         compile("org.togglz:togglz-spring-core:${togglzVersion}")
         optional("com.github.heneke.thymeleaf:thymeleaf-extras-togglz:${thymeleafTogglzVersion}")
+        optional("javax.validation:validation-api:${validationApiVersion}")
         optional("org.springframework.security:spring-security-config:${springSecurityVersion}")
         optional("org.springframework.security:spring-security-web:${springSecurityVersion}")
         optional("org.togglz:togglz-console:${togglzVersion}")

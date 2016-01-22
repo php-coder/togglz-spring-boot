@@ -19,6 +19,9 @@ package org.togglz.spring.boot.autoconfigure;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.togglz.core.Feature;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Map;
 
 /**
@@ -41,6 +44,7 @@ public class TogglzProperties {
 
     private Cache cache = new Cache();
 
+    @Valid
     private Console console = new Console();
 
     public boolean isEnabled() {
@@ -126,6 +130,8 @@ public class TogglzProperties {
 
         private boolean enabled = true;
 
+        @NotNull
+        @Pattern(regexp = "/[^?#]*", message = "Path must start with /")
         private String path = "/togglz-console";
 
         private boolean requiresFeatureAdmin = true;
