@@ -88,11 +88,14 @@ The following properties can be specified inside your application.properties/app
 	    path: /togglz-console # The path of the admin console when enabled.
 	    requires-feature-admin: true: Indicates if the admin console should be be protected with the feature admin authority. Default true but false if NoOpUserProvider us used.
 	    feature-admin-authority: ROLE_ADMIN # The name of the authority that is allowed to access the admin console.
+	  endpoint:
+	    id: togglz # The endpoint identifier.
+	    enabled: true # Enable actuator endpoint.
+	    sensitive: true # Indicates if the endpoint exposes sensitive information.
 
 ## TODO
 
   * Add improved security of admin console (similar like H2 console).
-  * Add Togglz actuator endpoint for viewing feature states.
   * ..
 
 ## Samples

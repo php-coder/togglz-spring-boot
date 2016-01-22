@@ -84,6 +84,9 @@ public class TogglzAutoConfigurationTests {
         assertThat(this.context.getBean(StateRepository.class), is(instanceOf(InMemoryStateRepository.class)));
         assertThat(this.context.getBeansOfType(ServletRegistrationBean.class).size(), is(equalTo(1)));
         assertThat(this.context.getBean(ServletRegistrationBean.class).getUrlMappings(), hasItems("/togglz-console/*"));
+        assertThat(this.context.getBean(TogglzEndpoint.class).getId(), is("togglz"));
+        assertThat(this.context.getBean(TogglzEndpoint.class).isEnabled(), is(true));
+        assertThat(this.context.getBean(TogglzEndpoint.class).isSensitive(), is(true));
         assertThat(ContextClassLoaderApplicationContextHolder.get(), is((ApplicationContext) this.context));
         assertThat(FeatureContext.getFeatureManager(), is(sameInstance(featureManager)));
     }
@@ -161,6 +164,13 @@ public class TogglzAutoConfigurationTests {
     }
 
     @Test
+    public void cacheEnabled() {
+        EnvironmentTestUtils.addEnvironment(this.context, "togglz.cache.enabled: true");
+        registerAndRefresh(TogglzAutoConfiguration.class, FeatureProviderConfig.class);
+        assertThat(this.context.getBean(StateRepository.class), is(instanceOf(CachingStateRepository.class)));
+    }
+
+    @Test
     public void consoleDisabled() {
         EnvironmentTestUtils.addEnvironment(this.context, "togglz.console.enabled: false");
         registerAndRefresh(TogglzAutoConfiguration.class, FeatureProviderConfig.class);
@@ -184,10 +194,24 @@ public class TogglzAutoConfigurationTests {
     }
 
     @Test
-    public void cacheEnabled() {
-        EnvironmentTestUtils.addEnvironment(this.context, "togglz.cache.enabled: true");
+    public void endpointDisabled() {
+        EnvironmentTestUtils.addEnvironment(this.context, "togglz.endpoint.enabled: false");
         registerAndRefresh(TogglzAutoConfiguration.class, FeatureProviderConfig.class);
-        assertThat(this.context.getBean(StateRepository.class), is(instanceOf(CachingStateRepository.class)));
+        assertThat(this.context.getBeansOfType(TogglzEndpoint.class).size(), is(0));
+    }
+
+    @Test
+    public void endpointNotSensitive() {
+        EnvironmentTestUtils.addEnvironment(this.context, "togglz.endpoint.sensitive: false");
+        registerAndRefresh(TogglzAutoConfiguration.class, FeatureProviderConfig.class);
+        assertThat(this.context.getBean(TogglzEndpoint.class).isSensitive(), is(false));
+    }
+
+    @Test
+    public void customEndpointId() {
+        EnvironmentTestUtils.addEnvironment(this.context, "togglz.endpoint.id: features");
+        registerAndRefresh(TogglzAutoConfiguration.class, FeatureProviderConfig.class);
+        assertThat(this.context.getBean(TogglzEndpoint.class).getId(), is("features"));
     }
 
     @Test

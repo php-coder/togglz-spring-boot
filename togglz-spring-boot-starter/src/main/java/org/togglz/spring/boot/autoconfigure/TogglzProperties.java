@@ -47,6 +47,8 @@ public class TogglzProperties {
     @Valid
     private Console console = new Console();
 
+    private Endpoint endpoint = new Endpoint();
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -101,6 +103,14 @@ public class TogglzProperties {
 
     public void setConsole(Console console) {
         this.console = console;
+    }
+
+    public Endpoint getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(Endpoint endpoint) {
+        this.endpoint = endpoint;
     }
 
     public static class Cache {
@@ -168,6 +178,39 @@ public class TogglzProperties {
 
         public void setFeatureAdminAuthority(String featureAdminAuthority) {
             this.featureAdminAuthority = featureAdminAuthority;
+        }
+    }
+
+    public static class Endpoint {
+
+        private String id = "togglz";
+
+        private boolean enabled = true;
+
+        private boolean sensitive = true;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public boolean isSensitive() {
+            return sensitive;
+        }
+
+        public void setSensitive(boolean sensitive) {
+            this.sensitive = sensitive;
         }
     }
 }

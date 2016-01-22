@@ -235,6 +235,20 @@ public class TogglzAutoConfiguration {
     }
 
     @Configuration
+    @ConditionalOnProperty(prefix = "togglz.endpoint", name = "enabled", matchIfMissing = true)
+    protected static class TogglzEndpointConfiguration {
+
+        @Autowired
+        private TogglzProperties properties;
+
+        @Bean
+        @ConditionalOnMissingBean
+        public TogglzEndpoint togglzEndpoint(FeatureManager featureManager) {
+            return new TogglzEndpoint(featureManager);
+        }
+    }
+
+    @Configuration
     @ConditionalOnClass(TogglzDialect.class)
     protected static class ThymeleafTogglzDialectConfiguration {
 
