@@ -7,7 +7,7 @@ buildscript {
         maven { url "http://repo.spring.io/snapshot" }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.1.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.2.RELEASE")
         classpath("org.springframework.build.gradle:propdeps-plugin:0.0.7")
     }
 }
@@ -18,7 +18,7 @@ ext {
     junitVersion           = "4.12"
     servletApiVersion      = "3.1.0"
     springVersion          = "4.2.4.RELEASE"
-    springBootVersion      = "1.3.1.RELEASE"
+    springBootVersion      = "1.3.2.RELEASE"
     springSecurityVersion  = "4.0.3.RELEASE"
     thymeleafTogglzVersion = "1.0.1.RELEASE"
     togglzVersion          = "2.3.0-SNAPSHOT"
