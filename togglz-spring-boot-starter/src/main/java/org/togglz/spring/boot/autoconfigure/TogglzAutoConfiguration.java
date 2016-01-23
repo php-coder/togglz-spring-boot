@@ -219,16 +219,9 @@ public class TogglzAutoConfiguration {
         public ServletRegistrationBean togglzConsole() {
             String path = properties.getConsole().getPath();
             String urlMapping = (path.endsWith("/") ? path + "*" : path + "/*");
-            TogglzConsoleServlet servlet;
+            TogglzConsoleServlet servlet = new TogglzConsoleServlet();
             if (userProvider instanceof NoOpUserProvider || !properties.getConsole().isRequiresFeatureAdmin()) {
-                servlet = new TogglzConsoleServlet() {
-                    @Override
-                    protected boolean isFeatureAdmin(HttpServletRequest request) {
-                        return true;
-                    }
-                };
-            } else {
-                servlet = new TogglzConsoleServlet();
+                servlet.setSecured(false);
             }
             return new ServletRegistrationBean(servlet, urlMapping);
         }
