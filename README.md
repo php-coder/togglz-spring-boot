@@ -60,7 +60,7 @@ If you define a `UserProvider`, `StateRepository`, `ActivationStrategyProvider` 
 auto configuration will not create these beans and will use the ones already available in the application context.
 
 The auto configuration also support providing feature values inside your application.properties/application.yml. See an
-example below of the application.yml. Note this is an Spring Boot in-memory implementation of a `StateRepository` which
+example below of the application.yml. Note this is a Spring Boot in-memory implementation of a `StateRepository` which
 does not persist edited features. If persistence is needed `FileBasedStateRepository`, `JDBCStateRepository` or any
 other applicable `StateRepository` can be added to the application context manually. When you want to use a
 `FileBasedStateRepository` you can also use this by providing a `togglz.features-file` application property.
@@ -74,7 +74,7 @@ configuration depends on the availability of the Spring Security dependency. If 
 `SpringSecurityUserProvider` is configured. In this case it will check if the user has the authority as provided by the
 `togglz.console.feature-admin-authority` application property. If Spring Security is not on the classpath a
 `NoOpUserProvider` is configured which provides a `null` user to the admin console servlet. This also means the admin
-console will not be accessible. For quick testing the `togglz.console.secured` application property can be to `false`.
+console will not be accessible. For quick testing the `togglz.console.secured` application property can be set to `false`.
 This will bypass security completely for the admin console. Be careful in production with this setting as it will give
 everybody access to the admin console. Setting `togglz.console.secured` to `false` is also useful when you want to
 protect the admin console independently from the `UserProvider`.
