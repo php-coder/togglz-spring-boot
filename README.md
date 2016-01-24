@@ -66,6 +66,18 @@ other applicable `StateRepository` can be added to the application context manua
 If the `togglz.features-file` is provided this will take precedence over features provided via application properties
 and effectively ignoring `togglz.features`.
 
+## Admin Console Security
+
+By default the Togglz admin console is secured using the `UserProvider` bean. Which `UserProvider` bean the auto
+configuration depends on the availability of the Spring Security dependency. If Spring Security is on the classpath a
+`SpringSecurityUserProvider` is configured. In this case it will check if the user has the authority as provided by the
+`togglz.console.feature-admin-authority` application property. If Spring Security is not on the classpath a
+`NoOpUserProvider` is configured which provides a `null` user to the admin console servlet. This also means the admin
+console will not be accessible. For quick testing the `togglz.console.secured` application property can be to `false`.
+This will bypass security completely for the admin console. Be careful in production with this setting as it will give
+everybody access to the admin console. Setting `togglz.console.secured` to `false` is also useful when you want to
+protect the admin console independently from the `UserProvider`.
+
 ## Application Properties
 
 The following properties can be specified inside your application.properties/application.yml file or as command line switches:
@@ -73,30 +85,26 @@ The following properties can be specified inside your application.properties/app
 	togglz:
 	  enabled: true # Enable Togglz for the application.
 	  feature-enums: # Comma-separated list of fully-qualified feature enum class names.
-	  feature-manager-name: # The name of the feature manager
-	  features: # The feature states
+	  feature-manager-name: # The name of the feature manager.
+	  features: # The feature states.
 	    HELLO_WORLD: true
 	    REVERSE_GREETING: true
 	    REVERSE_GREETING.strategy: username
 	    REVERSE_GREETING.param.users: user2, user3
 	  features-file: # The path to the features file that contains the feature states.
+	  features-file-min-check-interval: # The minimum amount of time in milliseconds to wait between checks of the file's modification date.
 	  cache:
 	    enabled: false # Enable feature state caching.
 	    time-to-live: 0 # The time in milliseconds after which a cache entry will expire.
 	  console:
 	    enabled: true # Enable admin console.
 	    path: /togglz-console # The path of the admin console when enabled.
-	    requires-feature-admin: true: Indicates if the admin console should be be protected with the feature admin authority. Default true but false if NoOpUserProvider us used.
 	    feature-admin-authority: ROLE_ADMIN # The name of the authority that is allowed to access the admin console.
+	    secured: true # Indicates if the admin console runs in secured mode. If false the application itself should take care of securing the admin console.
 	  endpoint:
 	    id: togglz # The endpoint identifier.
 	    enabled: true # Enable actuator endpoint.
 	    sensitive: true # Indicates if the endpoint exposes sensitive information.
-
-## TODO
-
-  * Add improved security of admin console (similar like H2 console).
-  * ..
 
 ## Samples
 
@@ -111,6 +119,7 @@ Run `./gradlew clean :togglz-spring-boot-sample-simple:bootRun`
 ### Hello World
 
 The Hello World sample is a web application sample using basic Togglz auto configuration.
+The admin console is explicitly configured as not secure for demo purpose.
 
 Run `./gradlew clean :togglz-spring-boot-sample-hello-world:bootRun`
 
@@ -119,6 +128,7 @@ The sample project also contains `MockMvc` integration tests.
 ### Spring Security
 
 The Spring Security sample is a web application demonstrating enabling/disabling features based on various users.
+The admin console is only accessable by admin users as configured via the feature-admin-authority application property.
 
 Run `./gradlew clean :togglz-spring-boot-sample-spring-security:bootRun`
 
@@ -128,6 +138,7 @@ The sample project also contains `MockMvc` integration tests.
 
 The Thymeleaf sample is a web application sample using basic Togglz auto configuration.
 It demonstrated the auto configuration of the Thymeleaf Togglz Dialect.
+The admin console is explicitly configured as not secure for demo purpose.
 
 Run `./gradlew clean :togglz-spring-boot-sample-thymeleaf:bootRun`
 

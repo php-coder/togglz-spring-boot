@@ -42,6 +42,8 @@ public class TogglzProperties {
 
     private String featuresFile;
 
+    private Integer featuresFileMinCheckInterval;
+
     private Cache cache = new Cache();
 
     @Valid
@@ -87,6 +89,14 @@ public class TogglzProperties {
 
     public void setFeaturesFile(String featuresFile) {
         this.featuresFile = featuresFile;
+    }
+
+    public Integer getFeaturesFileMinCheckInterval() {
+        return featuresFileMinCheckInterval;
+    }
+
+    public void setFeaturesFileMinCheckInterval(Integer featuresFileMinCheckInterval) {
+        this.featuresFileMinCheckInterval = featuresFileMinCheckInterval;
     }
 
     public Cache getCache() {
@@ -144,9 +154,9 @@ public class TogglzProperties {
         @Pattern(regexp = "/[^?#]*", message = "Path must start with /")
         private String path = "/togglz-console";
 
-        private boolean requiresFeatureAdmin = true;
-
         private String featureAdminAuthority;
+
+        private boolean secured = true;
 
         public boolean isEnabled() {
             return enabled;
@@ -164,20 +174,20 @@ public class TogglzProperties {
             this.path = path;
         }
 
-        public boolean isRequiresFeatureAdmin() {
-            return requiresFeatureAdmin;
-        }
-
-        public void setRequiresFeatureAdmin(boolean requiresFeatureAdmin) {
-            this.requiresFeatureAdmin = requiresFeatureAdmin;
-        }
-
         public String getFeatureAdminAuthority() {
             return featureAdminAuthority;
         }
 
         public void setFeatureAdminAuthority(String featureAdminAuthority) {
             this.featureAdminAuthority = featureAdminAuthority;
+        }
+
+        public boolean isSecured() {
+            return secured;
+        }
+
+        public void setSecured(boolean secured) {
+            this.secured = secured;
         }
     }
 

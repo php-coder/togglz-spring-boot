@@ -158,7 +158,12 @@ public class TogglzAutoConfiguration {
             String featuresFile = properties.getFeaturesFile();
             if (featuresFile != null) {
                 Resource resource = this.resourceLoader.getResource(featuresFile);
-                stateRepository = new FileBasedStateRepository(resource.getFile());
+                Integer minCheckInterval = properties.getFeaturesFileMinCheckInterval();
+                if (minCheckInterval != null) {
+                    stateRepository = new FileBasedStateRepository(resource.getFile(), minCheckInterval);
+                } else {
+                    stateRepository = new FileBasedStateRepository(resource.getFile());
+                }
             } else if (features != null && features.size() > 0) {
                 Properties props = new Properties();
                 props.putAll(features);
@@ -219,9 +224,7 @@ public class TogglzAutoConfiguration {
             String path = properties.getConsole().getPath();
             String urlMapping = (path.endsWith("/") ? path + "*" : path + "/*");
             TogglzConsoleServlet servlet = new TogglzConsoleServlet();
-            if (userProvider instanceof NoOpUserProvider || !properties.getConsole().isRequiresFeatureAdmin()) {
-                servlet.setSecured(false);
-            }
+            servlet.setSecured(properties.getConsole().isSecured());
             return new ServletRegistrationBean(servlet, urlMapping);
         }
     }

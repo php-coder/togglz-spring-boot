@@ -7,3 +7,5 @@ togglz:
   features:
     HELLO_WORLD: true
     REVERSE_GREETING: false
+  console:
+    secured: false
