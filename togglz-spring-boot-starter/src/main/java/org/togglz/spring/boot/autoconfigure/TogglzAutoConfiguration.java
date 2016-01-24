@@ -48,7 +48,6 @@ import org.togglz.core.user.NoOpUserProvider;
 import org.togglz.core.user.UserProvider;
 import org.togglz.spring.security.SpringSecurityUserProvider;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
