@@ -16,7 +16,8 @@ Optionally add the Tooglz Admin Console, Togglz Spring Security, Thymeleaf Toggl
     compile("com.github.heneke.thymeleaf:thymeleaf-extras-togglz:${thymeleafTogglzVersion}")
     testCompile("org.togglz:togglz-junit:${togglzVersion}")
 
-Note that the Tooglz Spring Boot Starter currently requires Togglz version `2.3.0-SNAPSHOT`.
+Note that the Tooglz Spring Boot Starter currently requires [Togglz version
+`2.3.0-SNAPSHOT`](http://www.togglz.org/download.html).
 
 ## Auto Configuration
 
