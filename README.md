@@ -6,7 +6,7 @@ Add the Togglz Spring Boot Starter dependency to your project:
 
     compile("com.github.marceloverdijk:togglz-spring-boot-starter")
 
-Adding the `togglz-spring-boot-starter` dependency will add automatically `togglz-code` and `togglz-spring-code` modules
+Adding the `togglz-spring-boot-starter` dependency will add automatically `togglz-core` and `togglz-spring-core` modules
 to your project.
 
 Optionally add the Tooglz Admin Console, Togglz Spring Security, Thymeleaf Togglz Dialect and Togglz JUnit Testing Support dependencies:
